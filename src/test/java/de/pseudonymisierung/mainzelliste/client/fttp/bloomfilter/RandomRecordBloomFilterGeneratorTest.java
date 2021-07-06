@@ -31,24 +31,27 @@ public class RandomRecordBloomFilterGeneratorTest {
     normalizationConfig.put("field.lastName.transformer.type", "StringFieldTransformer");
     normalizationConfig.put("field.lastName.transformer.replacement", "{\"Dr\\\\.|Dipl\\\\.\":\"\",\"é\":\"e\",\"ä\":\"ae\",\"Ä\":\"AE\",\"ö\":\"oe\",\"Ö\":\"OE\",\"ü\":\"ue\",\"Ü\":\"UE\"}");
     normalizationConfig.put("field.lastName.transformer.allowedChars", "[A-Z\\s]");
-    // concat year, month and day field value in birthDate field
+    //concat year, month and day field values in birthDate field
     //normalizationConfig.put("field.birthDate.transformer.type", "StringFieldConcatenation");
     //normalizationConfig.put("field.birthDate.transformer.source", "year,month,day");
 
-    // init filed normalization
+    //init filed normalization
     FieldsNormalization fieldsNormalization = new FieldsNormalization(normalizationConfig);
     RandomRecordBloomFilterGenerator bloomFilterGenerator = new RandomRecordBloomFilterGenerator(bloomFilterConfig);
 
-    Map<String, String> idat = new HashMap<>();
-    idat.put("firstName", "Herr");
-    idat.put("lastName", "Mustermann");
-    idat.put("birthDate", "19200101");
-    idat.put("gender", "m");
+    //prepare idat fields
+    Map<String, String> fields = new HashMap<>();
+    fields.put("firstName", "Herr");
+    fields.put("lastName", "Mustermann");
+    fields.put("birthDate", "19200101");
+    fields.put("gender", "m");
     String expectedBF = "aFRAty//BwRtDednRgb/Lwx9n6wFvdPhniK3dmEr03b4kcSZ+Jw68m++9h8FO43f+HHsEpk7Zc3YiF7Q9O8Upom5zJKjzUElYlFubVjAAgJMQWCMME6Yp+wkPXjm2bBHckHVs6ZzJASI/vAub/fVVps2dfmhYrA0MGXjd/iFDIZ4bF0xscaz7bzTo+uJTwQg008EVBWnbxr/57bHC309SCdbbWSxZhi3l+neQ7g3RoGxXQVGrRzEQdmsNlw3yUxINQ65LIAcbUA=";
 
-    // normalize idat
-    Map<String, String> normalizedIdat = fieldsNormalization.process(idat);
-    String ownBF = bloomFilterGenerator.generateBalancedBloomFilter(normalizedIdat).getBase64String();
-    Assert.assertEquals(ownBF, expectedBF);
+    //normalize fields
+    Map<String, String> normalizedFields = fieldsNormalization.process(fields);
+
+    //generate bloom filter
+    String bloomFilter = bloomFilterGenerator.generateBalancedBloomFilter(normalizedFields).getBase64String();
+    Assert.assertEquals(bloomFilter, expectedBF);
   }
 }
