@@ -15,7 +15,7 @@ public class StringFieldConcatenation implements FieldConcatenation<String> {
 
   public StringFieldConcatenation(String fieldName, Properties config) {
     this.fieldName = fieldName;
-    this.fieldNames = Stream.of(config.getProperty("transformer.source", "").split(","))
+    this.fieldNames = Stream.of(config.getProperty("source", "").split(","))
         .map(String::trim)
         .collect(Collectors.toList());
   }
