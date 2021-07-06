@@ -1,4 +1,4 @@
-package de.pseudonymisierung.fttp.util;
+package de.pseudonymisierung.mainzelliste.client.fttp.util;
 
 import java.util.HashMap;
 import java.util.Map;

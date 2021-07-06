@@ -1,6 +1,6 @@
-package de.pseudonymisierung.fttp.bloomfilter;
+package de.pseudonymisierung.mainzelliste.client.fttp.bloomfilter;
 
-import de.pseudonymisierung.fttp.util.PropertiesUtils;
+import de.pseudonymisierung.mainzelliste.client.fttp.util.PropertiesUtils;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.LinkedHashMap;

@@ -1,4 +1,4 @@
-package de.pseudonymisierung.fttp.normalization;
+package de.pseudonymisierung.mainzelliste.client.fttp.normalization;
 
 import java.util.ArrayList;
 import java.util.Collection;

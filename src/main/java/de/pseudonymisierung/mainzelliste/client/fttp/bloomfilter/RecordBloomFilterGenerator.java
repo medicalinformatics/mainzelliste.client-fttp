@@ -1,4 +1,4 @@
-package de.pseudonymisierung.fttp.bloomfilter;
+package de.pseudonymisierung.mainzelliste.client.fttp.bloomfilter;
 
 import java.util.Map;
 

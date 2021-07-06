@@ -1,6 +1,6 @@
-package de.pseudonymisierung.fttp.bloomfilter;
+package de.pseudonymisierung.mainzelliste.client.fttp.bloomfilter;
 
-import de.pseudonymisierung.fttp.normalization.FieldsNormalization;
+import de.pseudonymisierung.mainzelliste.client.fttp.normalization.FieldsNormalization;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;

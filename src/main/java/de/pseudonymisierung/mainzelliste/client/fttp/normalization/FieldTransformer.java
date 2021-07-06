@@ -1,4 +1,4 @@
-package de.pseudonymisierung.fttp.normalization;
+package de.pseudonymisierung.mainzelliste.client.fttp.normalization;
 
 public interface FieldTransformer<I, O> {
 

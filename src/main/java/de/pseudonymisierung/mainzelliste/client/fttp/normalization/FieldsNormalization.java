@@ -1,6 +1,6 @@
-package de.pseudonymisierung.fttp.normalization;
+package de.pseudonymisierung.mainzelliste.client.fttp.normalization;
 
-import de.pseudonymisierung.fttp.util.PropertiesUtils;
+import de.pseudonymisierung.mainzelliste.client.fttp.util.PropertiesUtils;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

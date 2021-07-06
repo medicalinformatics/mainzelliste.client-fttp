@@ -1,4 +1,4 @@
-package de.pseudonymisierung.fttp.normalization;
+package de.pseudonymisierung.mainzelliste.client.fttp.normalization;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
