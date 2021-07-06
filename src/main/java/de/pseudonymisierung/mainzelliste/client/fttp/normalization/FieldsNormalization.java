@@ -15,7 +15,7 @@ public class FieldsNormalization {
   private final Map<String, Function<Properties, FieldTransformer<String, String>>> fieldTransformersSupplier = new HashMap<>();
   private final Map<String, BiFunction<String, Properties, FieldConcatenation<String>>> fieldConcatenationsSupplier = new HashMap<>();
 
-  private final Map<String, FieldTransformer<String, String>> fieldTransformers;
+  private final Map<String, List<FieldTransformer<String, String>>> fieldTransformers;
   private final List<FieldConcatenation<String>> fieldConcatenations;
 
   public FieldsNormalization(Properties config) {
@@ -26,13 +26,13 @@ public class FieldsNormalization {
     fieldConcatenationsSupplier
         .put(StringFieldConcatenation.class.getSimpleName(), StringFieldConcatenation::new);
 
-    this.fieldTransformers = PropertiesUtils.getSubProperties(config, "field").entrySet()
-        .stream()
-        .filter(e -> fieldTransformersSupplier
-            .containsKey(e.getValue().getProperty("transformer.type", "").trim()))
+    this.fieldTransformers = PropertiesUtils.getSubProperties(config, "field").entrySet().stream()
         .collect(Collectors.toMap(Entry::getKey,
-            e -> fieldTransformersSupplier.get(e.getValue().getProperty("transformer.type"))
-                .apply(e.getValue())));
+            p -> PropertiesUtils.getSubProperties(p.getValue(), "transformer").values().stream()
+                .filter(
+                    c -> fieldTransformersSupplier.containsKey(c.getProperty("type", "").trim()))
+                .map(c -> fieldTransformersSupplier.get(c.getProperty("type")).apply(c))
+                .collect(Collectors.toList())));
 
     this.fieldConcatenations = PropertiesUtils.getSubProperties(config, "field").entrySet()
         .stream()
@@ -47,9 +47,18 @@ public class FieldsNormalization {
     Map<String, String> result = new HashMap<>(fields);
     // transform field value
     fieldTransformers.forEach(
-        (n, t) -> result.computeIfPresent(n, (fieldName, fieldValue) -> t.transform(fieldValue)));
+        (n, t) -> result.computeIfPresent(n, (fieldName, fieldValue) -> transform(t, fieldValue)));
     // concat fields
     fieldConcatenations.forEach(c -> c.concat(result));
     return result;
+  }
+
+  private String transform(List<FieldTransformer<String, String>> transformerList,
+      String fieldValue) {
+    String transformedField = fieldValue;
+    for (FieldTransformer<String, String> transformer : transformerList) {
+      transformedField = transformer.transform(transformedField);
+    }
+    return transformedField;
   }
 }

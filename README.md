@@ -5,12 +5,16 @@
 ```java
 // define how idat fields will be normalized 
 Properties normalizationConfig = new Properties();
-normalizationConfig.put("field.firstName.transformer.type", "StringFieldTransformer");
-normalizationConfig.put("field.firstName.transformer.replacement", "{\"Dr\\\\.|Dipl\\\\.\":\"\",\"é\":\"e\",\"ä\":\"ae\",\"Ä\":\"AE\",\"ö\":\"oe\",\"Ö\":\"OE\",\"ü\":\"ue\",\"Ü\":\"UE\"}");
-normalizationConfig.put("field.firstName.transformer.allowedChars", "[A-Z\\s]");
-normalizationConfig.put("field.lastName.transformer.type", "StringFieldTransformer");
-normalizationConfig.put("field.lastName.transformer.replacement", "{\"Dr\\\\.|Dipl\\\\.\":\"\",\"é\":\"e\",\"ä\":\"ae\",\"Ä\":\"AE\",\"ö\":\"oe\",\"Ö\":\"OE\",\"ü\":\"ue\",\"Ü\":\"UE\"}");
-normalizationConfig.put("field.lastName.transformer.allowedChars", "[A-Z\\s]");
+normalizationConfig.put("field.firstName.transformer.0.type", "StringFieldTransformer");
+normalizationConfig.put("field.firstName.transformer.0.replacement", "{\"Dr\\\\.|Dipl\\\\.\":\"\",\"é\":\"e\",\"ä\":\"ae\",\"Ä\":\"AE\",\"ö\":\"oe\",\"Ö\":\"OE\",\"ü\":\"ue\",\"Ü\":\"UE\"}");
+normalizationConfig.put("field.firstName.transformer.0.upperCase", "true");
+normalizationConfig.put("field.firstName.transformer.0.trim", "true");
+normalizationConfig.put("field.firstName.transformer.1.allowedChars", "[A-Z\\s]");
+normalizationConfig.put("field.lastName.transformer.0.type", "StringFieldTransformer");
+normalizationConfig.put("field.lastName.transformer.0.replacement", "{\"Dr\\\\.|Dipl\\\\.\":\"\",\"é\":\"e\",\"ä\":\"ae\",\"Ä\":\"AE\",\"ö\":\"oe\",\"Ö\":\"OE\",\"ü\":\"ue\",\"Ü\":\"UE\"}");
+normalizationConfig.put("field.lastName.transformer.0.upperCase", "true");
+normalizationConfig.put("field.lastName.transformer.0.trim", "true");
+normalizationConfig.put("field.lastName.transformer.1.allowedChars", "[A-Z\\s]");
 
 // init field normalization
 FieldsNormalization fieldsNormalization = new FieldsNormalization(normalizationConfig);
