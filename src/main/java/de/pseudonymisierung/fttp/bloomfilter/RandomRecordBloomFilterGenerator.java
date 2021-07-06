@@ -1,6 +1,5 @@
 package de.pseudonymisierung.fttp.bloomfilter;
 
-import de.pseudonymisierung.fttp.normalization.FieldsNormalization;
 import de.pseudonymisierung.fttp.util.PropertiesUtils;
 import java.util.ArrayList;
 import java.util.BitSet;
@@ -23,15 +22,14 @@ public class RandomRecordBloomFilterGenerator implements RecordBloomFilterGenera
   protected final Map<String, Random> fieldSeeds;
   protected final Long balancedBFSeed;
   protected final List<Integer> balancedBFSwapIndex = new ArrayList<>();
-  private final FieldsNormalization fieldsNormalization;
   Map<String, Map<String, BitSet>> ngramsToBitSetTable;
 
   public RandomRecordBloomFilterGenerator(Properties config) {
     this.vocabulary = config.getProperty("vocabulary", "ABCDEFGHIJKLMNOPQRSTUVWXYZ .-0123456789")
         .toCharArray();
     this.nGramLength = Integer.parseInt(config.getProperty("nGramLength", "2"));
-    this.length = Integer.parseInt(config.getProperty("length", "1000"));
-    this.randomPositionNumber = Integer.parseInt(config.getProperty("randomPositionNumber", "25"));
+    this.length = Integer.parseInt(config.getProperty("length", "900"));
+    this.randomPositionNumber = Integer.parseInt(config.getProperty("randomPositionNumber", "30"));
 
     this.fieldSeeds = PropertiesUtils.getSubProperties(config, "field").entrySet().stream()
         .collect(Collectors.toMap(Entry::getKey,
@@ -55,8 +53,6 @@ public class RandomRecordBloomFilterGenerator implements RecordBloomFilterGenera
               .forEach(i -> bitSet.set(seed.nextInt(this.length))));
       ngramsToBitSetTable.put(fieldName, bigramsToBitSet);
     });
-    //init preprocessing
-    this.fieldsNormalization = new FieldsNormalization(config);
   }
 
   //TODO refactor: find a map of n-grams
@@ -74,10 +70,9 @@ public class RandomRecordBloomFilterGenerator implements RecordBloomFilterGenera
   }
 
   public RecordBloomFilter generate(Map<String, String> idat) {
-    Map<String, String> processedIdat = this.fieldsNormalization.process(idat);
     BitSet bitSet = new BitSet(length);
-    fieldSeeds.keySet().stream().filter(processedIdat::containsKey)
-        .forEach(k -> bitSet.or(convertToBitSet(k, processedIdat.get(k))));
+    fieldSeeds.keySet().stream().filter(idat::containsKey)
+        .forEach(k -> bitSet.or(convertToBitSet(k, idat.get(k))));
     return new RecordBloomFilter(bitSet, length);
   }
 
