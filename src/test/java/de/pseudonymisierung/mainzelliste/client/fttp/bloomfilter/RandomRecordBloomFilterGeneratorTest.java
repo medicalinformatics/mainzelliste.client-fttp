@@ -43,6 +43,7 @@ public class RandomRecordBloomFilterGeneratorTest {
 
     //init filed normalization
     FieldsNormalization fieldsNormalization = new FieldsNormalization(normalizationConfig);
+    //init bloom filter generator
     RandomRecordBloomFilterGenerator bloomFilterGenerator = new RandomRecordBloomFilterGenerator(bloomFilterConfig);
 
     //prepare idat fields

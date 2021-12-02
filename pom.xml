@@ -5,7 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>de.pseudonymisierung</groupId>
   <artifactId>mainzelliste.client-fttp</artifactId>
-  <version>1.0.2-SNAPSHOT</version>
+  <version>1.0.3-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>mainzelliste.client-fttp</name>
