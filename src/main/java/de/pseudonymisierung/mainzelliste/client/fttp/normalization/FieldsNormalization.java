@@ -1,6 +1,7 @@
 package de.pseudonymisierung.mainzelliste.client.fttp.normalization;
 
 import de.pseudonymisierung.mainzelliste.client.fttp.util.PropertiesUtils;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,17 +30,14 @@ public class FieldsNormalization {
     this.fieldTransformers = PropertiesUtils.getSubProperties(config, "field").entrySet().stream()
         .collect(Collectors.toMap(Entry::getKey,
             p -> PropertiesUtils.getSubProperties(p.getValue(), "transformer").values().stream()
-                .filter(
-                    c -> fieldTransformersSupplier.containsKey(c.getProperty("type", "").trim()))
+                .filter( c -> fieldTransformersSupplier.containsKey(c.getProperty("type", "").trim()))
                 .map(c -> fieldTransformersSupplier.get(c.getProperty("type")).apply(c))
                 .collect(Collectors.toList())));
 
-    this.fieldConcatenations = PropertiesUtils.getSubProperties(config, "field").entrySet()
-        .stream()
-        .filter(e -> fieldConcatenationsSupplier
-            .containsKey(e.getValue().getProperty("transformer.type", "").trim()))
-        .map(e -> fieldConcatenationsSupplier.get(e.getValue().getProperty("transformer.type"))
-            .apply(e.getKey(), e.getValue()))
+    this.fieldConcatenations =  PropertiesUtils.getSubProperties(config, "field").entrySet().stream()
+        .flatMap( f -> PropertiesUtils.getSubProperties(f.getValue(), "transformer").values().stream()
+            .filter( p -> fieldConcatenationsSupplier.containsKey(p.getProperty("type", "").trim()))
+            .map( p ->  fieldConcatenationsSupplier.get(p.getProperty("type")).apply( f.getKey(), p)))
         .collect(Collectors.toList());
   }
 
